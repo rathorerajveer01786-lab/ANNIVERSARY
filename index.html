@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forever With You ❤️</title>
-
 <style>
 *{
   margin:0;
@@ -21,7 +20,6 @@ body{
 }
 
 /* ---------------- FIRST SCREEN ---------------- */
-
 .first-screen{
   position:absolute;
   width:100%;
@@ -71,7 +69,6 @@ button{
 }
 
 /* ---------------- SECOND SCREEN ---------------- */
-
 .second-screen{
   position:absolute;
   width:100%;
@@ -84,6 +81,7 @@ button{
   filter:blur(10px);
   transition:1s;
   overflow:hidden;
+  z-index:1;
 }
 
 /* Floating hearts */
@@ -126,3 +124,93 @@ button{
   text-align:center;
   box-shadow:0 0 40px rgba(255,20,147,0.6);
   z-index:2;
+}
+
+.card h2{
+  font-size:22px;
+  margin-bottom:15px;
+}
+
+.card p{
+  font-size:16px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+.card button{
+  padding:10px 20px;
+  border:none;
+  border-radius:20px;
+  background:#ff1493;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 15px #ff1493;
+  transition:0.3s;
+}
+
+.card button:hover{
+  transform:scale(1.05);
+  box-shadow:0 0 25px #ff66cc;
+}
+</style>
+</head>
+<body>
+
+<!-- FIRST SCREEN -->
+<div class="first-screen">
+  <h1>Happy Anniversary My Love ❤️</h1>
+  <svg class="heart-bg" viewBox="0 0 100 100">
+    <path d="M50 80 L20 40 A15 15 0 0 1 50 20 A15 15 0 0 1 80 40 Z"/>
+  </svg>
+  <button>Open Surprise</button>
+</div>
+
+<!-- SECOND SCREEN -->
+<div class="second-screen">
+  <div class="card">
+    <h2>Forever With You</h2>
+    <p>Every moment with you is a treasure. Here's to countless more memories together. 💖</p>
+    <button>❤️ Love You</button>
+  </div>
+</div>
+
+<script>
+// SCREEN TRANSITION
+const firstScreen = document.querySelector('.first-screen');
+const secondScreen = document.querySelector('.second-screen');
+const openBtn = firstScreen.querySelector('button');
+
+openBtn.addEventListener('click', () => {
+    firstScreen.style.opacity = '0';
+    firstScreen.style.pointerEvents = 'none';
+    secondScreen.style.filter = 'blur(0)';
+});
+
+// FLOATING HEARTS
+function createHeart(){
+    const heart = document.createElement('div');
+    heart.classList.add('floating-heart');
+    heart.style.left = Math.random() * 100 + 'vw';
+    heart.style.fontSize = (10 + Math.random() * 20) + 'px';
+    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
+    heart.innerHTML = '❤️';
+    secondScreen.appendChild(heart);
+
+    setTimeout(() => heart.remove(), 8000);
+}
+
+setInterval(createHeart, 500);
+
+// STARS
+for(let i=0;i<100;i++){
+    const star = document.createElement('div');
+    star.classList.add('star');
+    star.style.top = Math.random() * 100 + 'vh';
+    star.style.left = Math.random() * 100 + 'vw';
+    star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
+    secondScreen.appendChild(star);
+}
+</script>
+</body>
+</html>
