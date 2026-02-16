@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Forever With You ❤️</title>
+
 <style>
 *{
   margin:0;
@@ -20,6 +21,7 @@ body{
 }
 
 /* ---------------- FIRST SCREEN ---------------- */
+
 .first-screen{
   position:absolute;
   width:100%;
@@ -51,24 +53,45 @@ button{
   box-shadow:0 0 20px white;
 }
 
-/* Heart Glow */
+/* Neon Glow Heart */
+
 .heart-bg{
   position:absolute;
-  width:400px;
-  height:400px;
+  width:450px;
+  height:450px;
+  stroke:#ff4da6;
+  stroke-width:4;
   fill:none;
-  stroke:#fff;
-  stroke-width:3;
   opacity:0.6;
-  animation:pulse 2s infinite alternate;
+  filter:url(#glow);
+  animation:pulseGlow 2s ease-in-out infinite alternate;
+  z-index:1;
 }
 
-@keyframes pulse{
-  from{transform:scale(1);opacity:0.6;}
-  to{transform:scale(1.1);opacity:1;}
+.first-screen h1,
+.first-screen button{
+  position:relative;
+  z-index:2;
+}
+
+.heart-bg path{
+  stroke-dasharray:2000;
+  stroke-dashoffset:2000;
+  animation:drawHeart 4s linear infinite;
+}
+
+@keyframes drawHeart{
+  0%{ stroke-dashoffset:2000; }
+  100%{ stroke-dashoffset:0; }
+}
+
+@keyframes pulseGlow{
+  from{opacity:0.5; transform:scale(1);}
+  to{opacity:1; transform:scale(1.05);}
 }
 
 /* ---------------- SECOND SCREEN ---------------- */
+
 .second-screen{
   position:absolute;
   width:100%;
@@ -80,40 +103,10 @@ button{
   flex-direction:column;
   filter:blur(10px);
   transition:1s;
-  overflow:hidden;
-  z-index:1;
-}
-
-/* Floating hearts */
-.floating-heart{
-  position:absolute;
-  font-size:18px;
-  animation:floatUp 6s linear infinite;
-  opacity:0.7;
-}
-
-@keyframes floatUp{
-  0%{transform:translateY(100vh);opacity:1;}
-  100%{transform:translateY(-10vh);opacity:0;}
-}
-
-/* Stars */
-.star{
-  position:absolute;
-  width:3px;
-  height:3px;
-  background:white;
-  border-radius:50%;
-  animation:twinkle 1.5s infinite ease-in-out;
-}
-
-@keyframes twinkle{
-  0%{opacity:0.2;}
-  50%{opacity:1;}
-  100%{opacity:0.2;}
 }
 
 /* Card */
+
 .card{
   width:90%;
   max-width:400px;
@@ -126,91 +119,211 @@ button{
   z-index:2;
 }
 
-.card h2{
-  font-size:22px;
-  margin-bottom:15px;
+.card h1{
+  font-size:24px;
+  color:#ff66cc;
+  margin-bottom:10px;
 }
 
 .card p{
-  font-size:16px;
-  line-height:1.5;
-  margin-bottom:20px;
+  font-size:15px;
+  margin:8px 0;
 }
 
-.card button{
-  padding:10px 20px;
-  border:none;
-  border-radius:20px;
-  background:#ff1493;
+.propose-btn{
+  margin-top:15px;
+  display:none;
+  background:linear-gradient(45deg,#ffd700,#ff1493);
   color:white;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 0 15px #ff1493;
-  transition:0.3s;
+  box-shadow:0 0 20px gold;
 }
 
-.card button:hover{
-  transform:scale(1.05);
-  box-shadow:0 0 25px #ff66cc;
+/* Stars */
+
+.star{
+  position:absolute;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  animation:twinkle 1.5s infinite ease-in-out;
 }
+
+@keyframes twinkle{
+  0%{opacity:0.2; transform:scale(1);}
+  50%{opacity:1; transform:scale(1.8);}
+  100%{opacity:0.2; transform:scale(1);}
+}
+
+/* Rocket */
+
+.rocket{
+  position:absolute;
+  bottom:0;
+  width:4px;
+  height:15px;
+  background:white;
+  animation:rocketUp 1s linear forwards;
+}
+
+@keyframes rocketUp{
+  0%{transform:translateY(0);}
+  100%{transform:translateY(-80vh);}
+}
+
+/* Particle */
+
+.particle{
+  position:absolute;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  animation:burst 1.2s ease-out forwards;
+}
+
+@keyframes burst{
+  0%{opacity:1; transform:translate(0,0) scale(1);}
+  100%{opacity:0; transform:translate(var(--x), var(--y)) scale(0.5);}
+}
+
+/* Ring */
+
+.ring{
+  font-size:40px;
+  animation:ringPop 1s ease-in-out infinite alternate;
+}
+
+@keyframes ringPop{
+  from{transform:scale(1);}
+  to{transform:scale(1.2);}
+}
+
 </style>
 </head>
+
 <body>
 
+<audio id="music" loop>
+  <source src="dhun.mp3" type="audio/mpeg">
+</audio>
+
 <!-- FIRST SCREEN -->
-<div class="first-screen">
-  <h1>Happy Anniversary My Love ❤️</h1>
-  <svg class="heart-bg" viewBox="0 0 100 100">
-    <path d="M50 80 L20 40 A15 15 0 0 1 50 20 A15 15 0 0 1 80 40 Z"/>
-  </svg>
-  <button>Open Surprise</button>
+<div class="first-screen" id="first">
+
+<svg class="heart-bg" viewBox="0 0 600 600">
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <path d="M300 540 
+           L90 330 
+           A120 120 0 1 1 300 210 
+           A120 120 0 1 1 510 330 
+           Z"/>
+</svg>
+
+  <h1>Happy Anniversary My Love 💖</h1>
+  <button onclick="enterLove()">Enter My Heart 🌸</button>
 </div>
 
 <!-- SECOND SCREEN -->
-<div class="second-screen">
+<div class="second-screen" id="second">
   <div class="card">
-    <h2>Forever With You</h2>
-    <p>Every moment with you is a treasure. Here's to countless more memories together. 💖</p>
-    <button>❤️ Love You</button>
+    <h1>Forever With You 🌙</h1>
+    <p>17 February 2025 – Forever ♾️</p>
+    <p id="typeText"></p>
+    <button class="propose-btn" id="proposeBtn" onclick="showRing()">Will You Stay Forever? 💍</button>
+    <div id="ringArea"></div>
   </div>
 </div>
 
 <script>
-// SCREEN TRANSITION
-const firstScreen = document.querySelector('.first-screen');
-const secondScreen = document.querySelector('.second-screen');
-const openBtn = firstScreen.querySelector('button');
 
-openBtn.addEventListener('click', () => {
-    firstScreen.style.opacity = '0';
-    firstScreen.style.pointerEvents = 'none';
-    secondScreen.style.filter = 'blur(0)';
-});
+/* Stars */
+function createStars(){
+  for(let i=0;i<150;i++){
+    let star=document.createElement("div");
+    star.className="star";
+    star.style.top=Math.random()*100+"vh";
+    star.style.left=Math.random()*100+"vw";
+    star.style.animationDuration=(Math.random()*2+1)+"s";
+    document.getElementById("second").appendChild(star);
+  }
+}
+createStars();
 
-// FLOATING HEARTS
-function createHeart(){
-    const heart = document.createElement('div');
-    heart.classList.add('floating-heart');
-    heart.style.left = Math.random() * 100 + 'vw';
-    heart.style.fontSize = (10 + Math.random() * 20) + 'px';
-    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
-    heart.innerHTML = '❤️';
-    secondScreen.appendChild(heart);
-
-    setTimeout(() => heart.remove(), 8000);
+/* Enter */
+function enterLove(){
+  document.getElementById("first").style.opacity="0";
+  document.getElementById("first").style.pointerEvents="none";
+  document.getElementById("second").style.filter="blur(0)";
+  let music=document.getElementById("music");
+  if(music){ music.play().catch(()=>{}); }
+  typeWriter();
 }
 
-setInterval(createHeart, 500);
+/* Typewriter */
+let msg="Neetu, tum meri zindagi ho ❤️ Tum meri sabse khoobsurat kahani ho ✨ Main hamesha tumhara rahunga 🌙💍";
+let i=0;
 
-// STARS
-for(let i=0;i<100;i++){
-    const star = document.createElement('div');
-    star.classList.add('star');
-    star.style.top = Math.random() * 100 + 'vh';
-    star.style.left = Math.random() * 100 + 'vw';
-    star.style.width = star.style.height = (1 + Math.random() * 2) + 'px';
-    secondScreen.appendChild(star);
+function typeWriter(){
+  if(i<msg.length){
+    document.getElementById("typeText").innerHTML+=msg.charAt(i);
+    i++;
+    setTimeout(typeWriter,60);
+  } else {
+    launchFireworks();
+    document.getElementById("proposeBtn").style.display="inline-block";
+  }
 }
+
+/* Fireworks */
+function launchFireworks(){
+  for(let r=0;r<8;r++){
+    setTimeout(()=>{
+      let rocket=document.createElement("div");
+      rocket.className="rocket";
+      let startX=Math.random()*100;
+      rocket.style.left=startX+"vw";
+      document.body.appendChild(rocket);
+
+      rocket.addEventListener("animationend",function(){
+        explode(startX);
+        rocket.remove();
+      });
+
+    },r*200);
+  }
+}
+
+function explode(xPos){
+  const colors=["#ff0000","#ff1493","#00ffff","#ffff00","#00ff00","#ff4500","#8a2be2"];
+  for(let i=0;i<60;i++){
+    let particle=document.createElement("div");
+    particle.className="particle";
+    particle.style.left=xPos+"vw";
+    particle.style.top="20vh";
+    particle.style.background=colors[Math.floor(Math.random()*colors.length)];
+    let angle=Math.random()*2*Math.PI;
+    let distance=Math.random()*250;
+    particle.style.setProperty("--x",Math.cos(angle)*distance+"px");
+    particle.style.setProperty("--y",Math.sin(angle)*distance+"px");
+    document.body.appendChild(particle);
+    setTimeout(()=>particle.remove(),1200);
+  }
+}
+
+/* Ring */
+function showRing(){
+  document.getElementById("ringArea").innerHTML="<div class='ring'>💍</div><p>Forever Yours ❤️</p>";
+}
+
 </script>
+
 </body>
 </html>
